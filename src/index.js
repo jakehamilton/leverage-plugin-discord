@@ -12,12 +12,14 @@ class P extends Plugin {
 
         this.config = {
             type: 'discord',
-            identifier: component => {
-                if (!this.identifiers[component.__config__.discord.event]) {
-                    this.identifiers[component.__config__.discord.event] = 0
-                }
+            discord: {
+                identifier: component => {
+                    if (!this.identifiers[component.__config__.discord.event]) {
+                        this.identifiers[component.__config__.discord.event] = 0
+                    }
 
-                return `${component.__config__.discord.event}-${this.identifiers[component.__config__.discord.event]++}`
+                    return `${component.__config__.discord.event}-${this.identifiers[component.__config__.discord.event]++}`
+                }
             }
         }
     }
