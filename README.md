@@ -1,47 +1,49 @@
-Discord for [Leverage](http://github.com/jakehamilton/leverage)!
-====================
+# Discord for [Leverage](http://github.com/jakehamilton/leverage)!
 
-This is a plugin for Leverage that allows the `discord` type of components
+This is a plugin for Leverage that handles the `discord` type of components
 to be created.
 
-Config
-------
+## Discord Component
 
-```js
-{
-    event: 'Any event name from Discord.js'
+A Discord Component has the following interface:
+
+```typescript
+import { ComponentConfig, ComponentUnit } from '@leverage/core';
+
+export interface DiscordConfig extends ComponentConfig {
+    discord?: {
+        event?: string; // A `Discord.js` event name (defaults to 'message')
+    };
+}
+
+export interface DiscordComponent extends ComponentUnit {
+    config: DiscordConfig;
+
+    discord: (payload: any) => void;
 }
 ```
 
-Example
--------
+## Example
 
 ```js
-import { manager, Component } from 'leverage-js'
-import discord from 'leverage-plugin-discord'
+import { manager } from '@leverage/core';
+import { Discord, DiscordComponent } from '@leverage/plugin-discord';
 
-class Bot extends Component {
-    constructor () {
-        super()
+const discord = new Discord();
 
-        this.config = {
-            type: 'discord',
-            discord: {
-                event: 'message'
-            }
-        }
-    }
+const component: DiscordComponent = {
+    is: 'component',
+    type: 'discord',
+    discord ({ channel }) {
+        channel.send('Hello, World!');
+    },
+};
 
-    discord (message) {
-        if (message.content.startsWith('ping')) {
-            message.channel.send('pong')
-        }
-    }
-}
+manager.add(discord, component);
 
-manager.plugin(discord)
-
-manager.add(new Bot())
-
-discord.login('<YOUR_BOT_TOKEN>')
+discord.login('<YOUR_BOT_TOKEN>');
 ```
+
+## Questions
+
+Have a question? Feel free to [file an issue](https://github.com/jakehamilton/leverage-plugin-discord/issues/new)!

@@ -1,45 +1,74 @@
 {
-  "name": "leverage-plugin-discord",
-  "version": "1.0.1",
-  "description": "A Discord plugin for Leverage",
-  "main": "dist/index.js",
-  "scripts": {
-    "test": "mocha --recursive --colors --reporter nyan --compilers js:babel-core/register",
-    "compile": "babel src --out-dir dist --no-comments --minify",
-    "prepublish": "npm run compile"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/jakehamilton/leverage-plugin-discord.git"
-  },
-  "keywords": [
-    "leverage",
-    "discord",
-    "plugin"
-  ],
-  "author": "Jake Hamilton <jehamilton122@gmail.com>",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/jakehamilton/leverage-plugin-discord/issues"
-  },
-  "homepage": "https://github.com/jakehamilton/leverage-plugin-discord#readme",
-  "devDependencies": {
-    "babel-cli": "^6.24.1",
-    "babel-core": "^6.25.0",
-    "babel-preset-latest": "^6.24.1",
-    "chai": "^4.0.2",
-    "chai-spies": "^0.7.1",
-    "eslint": "^4.1.1",
-    "eslint-config-standard": "^10.2.1",
-    "eslint-plugin-promise": "^3.5.0",
-    "eslint-plugin-standard": "^3.0.1",
-    "leverage-js": "^1.0.0",
-    "mocha": "^3.4.2",
-    "proxyquire": "^1.8.0"
-  },
-  "dependencies": {
-    "discord.js": "^11.1.0",
-    "erlpack": "github:hammerandchisel/erlpack",
-    "sodium": "^2.0.1"
-  }
+    "name": "@leverage/plugin-discord",
+    "version": "3.0.0",
+    "description": "A Discord plugin for Leverage",
+    "license": "MIT",
+    "main": "dist/lib.js",
+    "browser": "dist/lib.browser.js",
+    "types": "dist/lib.d.ts",
+    "scripts": {
+        "commit": "git-cz",
+        "prebuild": "rimraf dist",
+        "build": "webpack",
+        "postbuild": "rimraf dist/types",
+        "typecheck": "tsc --noEmit",
+        "lint": "tslint --project tsconfig.json --type-check --format stylish",
+        "test": "jest --env=node --coverage --config jest.config.json && npm run typecheck && npm run lint",
+        "test:watch": "jest --env=node --watch --updateSnapshot --config jest.config.json",
+        "chore:deploy": "travis-deploy-once",
+        "chore:release": "semantic-release",
+        "prepublishOnly": "npm run test && npm run build"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/jakehamilton/leverage-plugin-discord.git"
+    },
+    "keywords": [
+        "leverage",
+        "discord",
+        "plugin"
+    ],
+    "author": "Jake Hamilton <jehamilton122@gmail.com>",
+    "bugs": {
+        "url": "https://github.com/jakehamilton/leverage-plugin-discord/issues"
+    },
+    "homepage": "https://github.com/jakehamilton/leverage-plugin-discord#readme",
+    "files": [
+        "dist"
+    ],
+    "publishConfig": {
+        "access": "public"
+    },
+    "config": {
+        "commitizen": {
+            "path": "./node_modules/cz-conventional-changelog"
+        }
+    },
+    "dependencies": {
+        "@leverage/core": "^3.0.0",
+        "@types/express": "^4.11.0",
+        "@types/node": "^8.0.0",
+        "express": "^4.16.2",
+        "discord.js": "^11.1.0",
+        "tslib": "^1.6.0"
+    },
+    "devDependencies": {
+        "@types/jest": "^20.0.0",
+        "commitizen": "^2.10.1",
+        "cz-conventional-changelog": "^2.1.0",
+        "dts-bundle": "^0.7.2",
+        "dts-bundle-webpack": "^1.0.0",
+        "jest": "^20.0.0",
+        "pascal-case": "^2.0.1",
+        "rimraf": "^2.6.1",
+        "semantic-release": "^15.7.1",
+        "semver": "^5.4.0",
+        "travis-deploy-once": "^5.0.1",
+        "ts-jest": "^20.0.0",
+        "tslint": "^5.6.0",
+        "typescript": "^2.4.0",
+        "webpack": "^4.16.0",
+        "webpack-cli": "^3.0.8",
+        "webpack-node-externals": "^1.7.2"
+    }
 }
