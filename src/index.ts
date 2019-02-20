@@ -6,27 +6,29 @@ import {
     ComponentUnit,
     ComponentConfigInstance,
 } from '@leverage/core';
-import { Client } from 'discord.js';
+import { Client, Message } from 'discord.js';
 
-export interface DiscordConfig extends ComponentConfig {
+interface DiscordConfig extends ComponentConfig {
     discord?: {
         event?: string;
+        command?: string;
     };
 }
 
-export interface DiscordConfigInstance extends ComponentConfigInstance {
+interface DiscordConfigInstance extends ComponentConfigInstance {
     discord?: {
         event?: string;
+        command?: string;
     };
 }
 
-export interface DiscordComponent extends ComponentUnit {
+interface DiscordComponent extends ComponentUnit {
     config: DiscordConfig;
 
     discord: (payload: any) => void;
 }
 
-export interface DiscordComponentInstance extends ComponentInstance {
+interface DiscordComponentInstance extends ComponentInstance {
     config: DiscordConfigInstance;
 }
 
@@ -50,7 +52,25 @@ export class Discord extends Plugin implements PluginUnit {
             );
         }
 
-        this.client.on(component.config.discord!.event!, component.discord);
+        if (
+            'command' in component.config.discord! &&
+            component.config.discord!.event! === 'message'
+        ) {
+            this.client.on(
+                component.config.discord!.event!,
+                (message: Message) => {
+                    if (
+                        message.content.startsWith(
+                            component.config.discord!.command!,
+                        )
+                    ) {
+                        component.discord(message);
+                    }
+                },
+            );
+        } else {
+            this.client.on(component.config.discord!.event!, component.discord);
+        }
     }
 
     login (token: string) {
@@ -61,3 +81,10 @@ export class Discord extends Plugin implements PluginUnit {
 }
 
 export default Discord;
+
+export {
+    DiscordConfig,
+    DiscordConfigInstance,
+    DiscordComponent,
+    DiscordComponentInstance,
+};
