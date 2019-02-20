@@ -1,6 +1,6 @@
 {
     "name": "@leverage/plugin-discord",
-    "version": "3.0.0",
+    "version": "3.1.0",
     "description": "A Discord plugin for Leverage",
     "license": "MIT",
     "main": "dist/lib.js",
